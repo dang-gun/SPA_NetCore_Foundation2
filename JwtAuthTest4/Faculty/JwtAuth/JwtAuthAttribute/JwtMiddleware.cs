@@ -1,16 +1,17 @@
-namespace WebApi.Authorization;
+namespace JwtAuth;
 
+using JwtAuth;
+using JwtAuth.Models;
 using Microsoft.Extensions.Options;
 using ModelsDB;
 using System.Security.Claims;
-using WebApi.Helpers;
 
 public class JwtMiddleware
 {
     private readonly RequestDelegate _next;
-    private readonly AppSettings _appSettings;
+    private readonly JwtAuthSettingModel _appSettings;
 
-    public JwtMiddleware(RequestDelegate next, IOptions<AppSettings> appSettings)
+    public JwtMiddleware(RequestDelegate next, IOptions<JwtAuthSettingModel> appSettings)
     {
         _next = next;
         _appSettings = appSettings.Value;

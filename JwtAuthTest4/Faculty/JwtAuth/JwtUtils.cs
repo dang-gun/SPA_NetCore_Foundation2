@@ -1,5 +1,6 @@
-namespace WebApi.Authorization;
+namespace JwtAuth;
 
+using JwtAuth.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using ModelsDB;
@@ -7,7 +8,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using WebApi.Helpers;
 
 public interface IJwtUtils
 {
@@ -15,17 +15,28 @@ public interface IJwtUtils
     public int? ValidateJwtToken(string token);
 }
 
+/// <summary>
+/// https://jasonwatmore.com/post/2022/01/24/net-6-jwt-authentication-with-refresh-tokens-tutorial-with-example-api#running-angular
+/// </summary>
 public class JwtUtils : IJwtUtils
 {
-    private readonly ModelsDbContext _context;
-    private readonly AppSettings _appSettings;
+    /// <summary>
+    /// 설정된 세팅 정보
+    /// </summary>
+    private readonly JwtAuthSettingModel _JwtAuthSetting;
 
-    public JwtUtils(
-        ModelsDbContext context,
-        IOptions<AppSettings> appSettings)
+    public JwtUtils(IOptions<JwtAuthSettingModel> appSettings)
     {
-        _context = context;
-        _appSettings = appSettings.Value;
+        _JwtAuthSetting = appSettings.Value;
+
+        if (_JwtAuthSetting.Secret == null 
+            || _JwtAuthSetting.Secret == string.Empty)
+        {//시크릿 값이 없다.
+
+            //새로 생성한다.
+            _JwtAuthSetting.Secret 
+                = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+        }
     }
 
     /// <summary>
@@ -37,7 +48,7 @@ public class JwtUtils : IJwtUtils
     {
         // generate token that is valid for 15 minutes
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+        var key = Encoding.ASCII.GetBytes(_JwtAuthSetting.Secret!);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new[] { new Claim("idUser", account.idUser.ToString()) }),
@@ -60,7 +71,7 @@ public class JwtUtils : IJwtUtils
             return null;
 
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+        var key = Encoding.ASCII.GetBytes(_JwtAuthSetting.Secret!);
         try
         {
             tokenHandler.ValidateToken(token, new TokenValidationParameters
@@ -87,31 +98,19 @@ public class JwtUtils : IJwtUtils
     }
 
     /// <summary>
-    /// 리플레시 토큰 생성
+    /// 리플레시 토큰 생성.
     /// </summary>
-    /// <param name="ipAddress"></param>
+    /// <remarks>중복검사는 하지 않으므로 필요하다면 호출한쪽에서 중복검사를 해야 한다.</remarks>
     /// <returns></returns>
-    public UserRefreshToken GenerateRefreshToken(string ipAddress)
+    public UserRefreshToken GenerateRefreshToken()
     {
         var refreshToken = new UserRefreshToken
         {
-            // token is a cryptographically strong random sequence of values
-            Token = Convert.ToHexString(RandomNumberGenerator.GetBytes(64)),
-            // token is valid for 7 days
-            Expires = DateTime.UtcNow.AddDays(7),
-            Created = DateTime.UtcNow,
-            CreatedByIp = ipAddress
+            //랜덤하게 값 생성
+            RefreshToken = Convert.ToHexString(RandomNumberGenerator.GetBytes(64)),
+            //설정된 시간(초)만큼 시간을 설정한다.
+            ExpiresTime = DateTime.UtcNow.AddSeconds(this._JwtAuthSetting.RefreshTokenLifetime),
         };
-
-        // ensure token is unique by checking against db
-        UserRefreshToken? findURT 
-            = _context.UserRefreshToken
-                .FirstOrDefault(w=> w.RefreshToken == refreshToken.Token);
-
-        if (null != findURT)
-        {//생성된 값이 중복되었다면 다시 생성한다.
-            return GenerateRefreshToken(ipAddress);
-        }
             
         return refreshToken;
     }

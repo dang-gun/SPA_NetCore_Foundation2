@@ -1,4 +1,4 @@
-namespace WebApi.Authorization;
+namespace JwtAuth;
 
 /// <summary>
 /// 인증 스킵 속성

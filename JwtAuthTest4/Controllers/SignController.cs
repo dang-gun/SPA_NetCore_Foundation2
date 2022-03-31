@@ -2,6 +2,7 @@
 using JwtAuthTest4.Models;
 using Microsoft.AspNetCore.Mvc;
 using ModelsDB;
+using JwtAuth;
 
 namespace JwtAuthTest4.Controllers
 {
@@ -14,6 +15,7 @@ namespace JwtAuthTest4.Controllers
 	{
 
 		[HttpPut]
+		[AllowAnonymous]
 		public ActionResult<SignInModel> SignIn(
 					[FromForm] string sSignName
 					, [FromForm] string sPassword)
@@ -49,6 +51,7 @@ namespace JwtAuthTest4.Controllers
 		/// <param name="idUser"></param>
 		/// <returns></returns>
 		[HttpGet]
+		[Authorize]
 		public ActionResult<SignInfoModel> SignInfo(long idUser)
 		{
 			//로그인 처리용 모델

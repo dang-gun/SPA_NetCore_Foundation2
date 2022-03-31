@@ -1,6 +1,9 @@
-﻿using JwtAuthTest4.Global;
+﻿using JwtAuth;
+using JwtAuth.Models;
+using JwtAuthTest4.Global;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Serialization;
-using WebApi.Authorization;
+
 
 namespace JwtAuthTest4
 {
@@ -35,6 +38,13 @@ namespace JwtAuthTest4
             //API모델을 파스칼 케이스 유지하기
             services.AddControllers().AddNewtonsoftJson(options => { options.SerializerSettings.ContractResolver = new DefaultContractResolver(); });
 
+
+            //Jwt Auth Setting 정보 전달
+            //모델로 전달하는 방법을 못찾음
+            //JwtAuthSettingModel newJAS = new JwtAuthSettingModel();
+            //newJAS.Secret = Configuration["JwtSecret"];
+            //services.Configure<JwtAuthSettingModel>(new Action<JwtAuthSettingModel>(newJAS));
+            services.Configure<JwtAuthSettingModel>(Configuration.GetSection("JwtSecretSetting"));
             services.AddScoped<IJwtUtils, JwtUtils>();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -53,6 +63,9 @@ namespace JwtAuthTest4
                 //app.UseSwagger();
                 //app.UseSwaggerUI();
             }
+
+            //JwtAuth 미들웨어 주입
+            app.UseMiddleware<JwtMiddleware>();
 
             //스웨거 사용
             app.UseSwagger();

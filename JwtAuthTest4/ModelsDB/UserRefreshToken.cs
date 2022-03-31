@@ -36,19 +36,27 @@ namespace ModelsDB
 		/// </summary>
 		public DateTime? RevokeTime { get; set; }
 
+		/// <summary>
+		/// 생성당시 아이피
+		/// </summary>
+		public string? IpCreated { get; set; }
 
-
+		#region 속성
 		/// <summary>
 		/// 만료 여부
 		/// </summary>
+		[NotMapped]
 		public bool ExpiredIs => DateTime.UtcNow >= this.ExpiresTime;
 		/// <summary>
 		/// 취소 여부
 		/// </summary>
+		[NotMapped]
 		public bool RevokeIs => RevokeTime != null;
 		/// <summary>
 		/// 사용가능 여부
 		/// </summary>
+		[NotMapped]
 		public bool ActiveIs => RevokeTime == null && !ExpiredIs;
+		#endregion
 	}
 }
