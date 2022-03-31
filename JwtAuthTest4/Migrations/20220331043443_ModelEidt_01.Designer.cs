@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ModelsDB;
 
@@ -10,9 +11,10 @@ using ModelsDB;
 namespace JwtAuthTest4.Migrations
 {
     [DbContext(typeof(ModelsDbContext))]
-    partial class ModelsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220331043443_ModelEidt_01")]
+    partial class ModelEidt_01
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.3");
@@ -56,12 +58,6 @@ namespace JwtAuthTest4.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("ActiveIs")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("ExpiredIs")
-                        .HasColumnType("INTEGER");
-
                     b.Property<DateTime>("ExpiresTime")
                         .HasColumnType("TEXT");
 
@@ -71,9 +67,6 @@ namespace JwtAuthTest4.Migrations
                     b.Property<string>("RefreshToken")
                         .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<bool>("RevokeIs")
-                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("RevokeTime")
                         .HasColumnType("TEXT");

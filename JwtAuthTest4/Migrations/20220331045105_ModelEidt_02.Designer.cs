@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ModelsDB;
 
@@ -10,9 +11,10 @@ using ModelsDB;
 namespace JwtAuthTest4.Migrations
 {
     [DbContext(typeof(ModelsDbContext))]
-    partial class ModelsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220331045105_ModelEidt_02")]
+    partial class ModelEidt_02
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.3");

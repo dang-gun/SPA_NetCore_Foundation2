@@ -26,14 +26,14 @@ public class JwtMiddleware
             = context.Request
                 .Headers["Authorization"]
                 .FirstOrDefault()?
-                .Split(" ")
+                .Split(_appSettings.AuthTokenStartName_Complete)
                 .Last();
 
         if (null != token)
         {//토큰이 있다.
 
             //토큰에서 idUser 추출
-            int? idUser = jwtUtils.ValidateJwtToken(token);
+            int? idUser = jwtUtils.AccessTokenValidate(token);
 
 
             if (idUser != null && 0 < idUser)

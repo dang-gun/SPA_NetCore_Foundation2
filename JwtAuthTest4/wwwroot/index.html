@@ -13,7 +13,8 @@
 	<br />
 	<input type="text" id="txtSignName" value="test01" />
 	<input type="password" id="txtPassword" value="1111" /><br />
-	<button onclick="SignInCall()">사인인</button><br />
+	<button onclick="SignInCall()">사인 인</button><br />
+	<button onclick="SignOutCall()">사인 아웃</button><br />
 	<br />
 	<br />
 	<button onclick="SignInfoCall()">사인 인포</button><br />
@@ -38,6 +39,10 @@
 			});
 		}
 
+
+		var JwtToken = "";
+		var RefreshToken = "";
+
 		function SignInCall()
 		{
 			$.ajax({
@@ -50,7 +55,30 @@
 				success: function (data)
 				{
 					console.log(data);
-					alert("성공 : " + data.Token);
+					JwtToken = data.AccessToken;
+					RefreshToken = data.RefreshToken;
+					alert("성공 : " + data.AccessToken);
+				},
+				error: function (error)
+				{
+					console.log(error);
+
+					alert("알수 없는 오류가 발생했습니다.");
+
+				}
+			});
+		}
+
+		function SignOutCall()
+		{
+			$.ajax({
+				url: "api/Sign/SignOut",
+				type: "PUT",
+				headers: { "Authorization": "bearer " + JwtToken },
+				success: function (data)
+				{
+					console.log(data);
+					alert("성공 : " + data.Complete);
 				},
 				error: function (error)
 				{
@@ -67,6 +95,7 @@
 			$.ajax({
 				url: "api/Sign/SignInfo",
 				type: "Get",
+				headers: { "Authorization": "bearer " + JwtToken },
 				data: { idUser: 1 },
 				success: function (data)
 				{

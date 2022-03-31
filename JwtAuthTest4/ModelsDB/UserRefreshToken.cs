@@ -45,18 +45,26 @@ namespace ModelsDB
 		/// <summary>
 		/// 만료 여부
 		/// </summary>
-		[NotMapped]
-		public bool ExpiredIs => DateTime.UtcNow >= this.ExpiresTime;
+		public bool ExpiredIs { get; set; }
 		/// <summary>
 		/// 취소 여부
 		/// </summary>
-		[NotMapped]
-		public bool RevokeIs => RevokeTime != null;
+		public bool RevokeIs { get; set; }
 		/// <summary>
 		/// 사용가능 여부
 		/// </summary>
-		[NotMapped]
-		public bool ActiveIs => RevokeTime == null && !ExpiredIs;
+		public bool ActiveIs { get; set; }
+
 		#endregion
+
+		/// <summary>
+		/// 이 토큰의 사용가능여부를 다시 확인한다.
+		/// </summary>
+		public void ActiveCheck()
+		{
+			this.ExpiredIs = DateTime.UtcNow >= this.ExpiresTime;
+			this.RevokeIs = RevokeTime != null;
+			this.ActiveIs = RevokeTime == null && !ExpiredIs;
+		}
 	}
 }
