@@ -5,6 +5,12 @@ VisualStudioVersion = 17.1.32319.34
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuth2Test1", "OAuth2Test1\OAuth2Test1.csproj", "{F108142E-2388-487E-A23B-0B5C90FFEA3E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DGAuthServer", "DGAuthServer\DGAuthServer.csproj", "{CBE6CBFC-848D-41AE-8A22-9A62DBBB1884}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FoundationTest", "FoundationTest\FoundationTest.csproj", "{586BF1C6-5CE4-4B58-81CB-80C663D2D165}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreNpmApi", "AspNetCoreNpmApi\AspNetCoreNpmApi.csproj", "{34E21D02-7FCD-4DD3-885D-A55547C2E913}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +21,18 @@ Global
 		{F108142E-2388-487E-A23B-0B5C90FFEA3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F108142E-2388-487E-A23B-0B5C90FFEA3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F108142E-2388-487E-A23B-0B5C90FFEA3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBE6CBFC-848D-41AE-8A22-9A62DBBB1884}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBE6CBFC-848D-41AE-8A22-9A62DBBB1884}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBE6CBFC-848D-41AE-8A22-9A62DBBB1884}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBE6CBFC-848D-41AE-8A22-9A62DBBB1884}.Release|Any CPU.Build.0 = Release|Any CPU
+		{586BF1C6-5CE4-4B58-81CB-80C663D2D165}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{586BF1C6-5CE4-4B58-81CB-80C663D2D165}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{586BF1C6-5CE4-4B58-81CB-80C663D2D165}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{586BF1C6-5CE4-4B58-81CB-80C663D2D165}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34E21D02-7FCD-4DD3-885D-A55547C2E913}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34E21D02-7FCD-4DD3-885D-A55547C2E913}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34E21D02-7FCD-4DD3-885D-A55547C2E913}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34E21D02-7FCD-4DD3-885D-A55547C2E913}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
