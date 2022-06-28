@@ -91,6 +91,7 @@ public class DgAuthSettingModel
 	/// 시크릿을 혼자 사용하면 엑세스 토큰을 강제로 만료시키는 기능을 사용할 수 있다.<br />
 	/// 보안상으로도 더 좋다.<br />
 	/// 하지만 매번 저장소를 검색해야 하므로 자원낭비가 심하다.<br />
+	/// 이 옵션을 사용하면 엑세스 토큰도 리플래시 토큰처럼 서버에서 관리하는 효과가 있으므로 되도록 사용하지 않는것이 좋다.<br />
 	/// 자신의 서비스가 동시접속자가 많다면 권장하지 않는 기능이다.
 	/// </remarks>
 	public bool SecretAlone { get; set; } = false;
@@ -109,7 +110,6 @@ public class DgAuthSettingModel
 	/// 문장도 가능하지만 가능한 짧게 넣는것이 좋다.
 	/// </para>
 	/// </remarks>
-	/// 
 	public string SecretAloneDelimeter { get; set; } = "%";
 
 	#region 엑세스 토큰

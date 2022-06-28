@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DGAuthServer;
 
+/// <summary>
+/// DGAuthServer용 전역 개체
+/// </summary>
 public static class DGAuthServerGlobal
 {
 	/// <summary>
@@ -35,7 +38,5 @@ public static class DGAuthServerGlobal
 	/// DB 컨택스트의 OnConfiguring이벤트에 사용될 액션
 	/// </summary>
 	public static Action<DbContextOptionsBuilder>? ActDbContextOnConfiguring = null;
-
-
 
 }

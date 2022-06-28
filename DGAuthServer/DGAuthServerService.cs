@@ -288,7 +288,8 @@ public class DGAuthServerService
     /// 기존 엑세스토큰은 사용할 수 없게 된다.
     /// <para>
     /// 여러 사이트(혹은 프로그램)에서 하나의 인증서버를 두고 사용할경우 
-    /// idUser가 겹치면 다른 사이트에서도 엑세스토큰이 만료되게 된다.
+    /// idUser와 sClass가 겹치면 다른 사이트에서도 엑세스토큰이 만료되게 된다.<br />
+    /// bAllRevoke가 true이면 idUser만 겹치면 만료된다.
     /// </para>
     /// </remarks>
     /// 
