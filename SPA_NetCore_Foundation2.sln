@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DGAuthServer", "DGAuthServe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FoundationTest", "FoundationTest\FoundationTest.csproj", "{586BF1C6-5CE4-4B58-81CB-80C663D2D165}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreNpmApi", "AspNetCoreNpmApi\AspNetCoreNpmApi.csproj", "{34E21D02-7FCD-4DD3-885D-A55547C2E913}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore6React", "AspNetCore6React\AspNetCore6React.csproj", "{EA80FC37-83D1-4964-B076-82FFC622503B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{586BF1C6-5CE4-4B58-81CB-80C663D2D165}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{586BF1C6-5CE4-4B58-81CB-80C663D2D165}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{586BF1C6-5CE4-4B58-81CB-80C663D2D165}.Release|Any CPU.Build.0 = Release|Any CPU
-		{34E21D02-7FCD-4DD3-885D-A55547C2E913}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{34E21D02-7FCD-4DD3-885D-A55547C2E913}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{34E21D02-7FCD-4DD3-885D-A55547C2E913}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{34E21D02-7FCD-4DD3-885D-A55547C2E913}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA80FC37-83D1-4964-B076-82FFC622503B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA80FC37-83D1-4964-B076-82FFC622503B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA80FC37-83D1-4964-B076-82FFC622503B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA80FC37-83D1-4964-B076-82FFC622503B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
