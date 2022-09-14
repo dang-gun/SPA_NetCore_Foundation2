@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
@@ -28,8 +28,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Folder Include="Faculty\" />
 		<Folder Include="ProjectFiles\" />
 		<Folder Include="wwwroot\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\ApiResult\ApiResult.csproj" />
+	  <ProjectReference Include="..\DGAuthServer\DGAuthServer.csproj" />
 	</ItemGroup>
 
 

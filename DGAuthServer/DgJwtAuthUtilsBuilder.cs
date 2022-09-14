@@ -3,6 +3,7 @@ using DGAuthServer.Models;
 using DGAuthServer.ModelsDB;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DGAuthServer;
@@ -72,6 +73,14 @@ public static class DgJwtAuthUtilsBuilder
         DGAuthServerGlobal.DbClearExpectedTime
             = DGAuthServerGlobal.DbClearTime
                 .AddSeconds(DGAuthServerGlobal.Setting.DbClearTime);
+
+
+        //메모리 캐쉬 사용여부 처리 ************************
+        if (true == DGAuthServerGlobal.Setting.MemoryCacheIs)
+        {//사용
+            DGAuthServerGlobal.MemoryCache 
+                = new MemoryCache(new MemoryCacheOptions() {});
+        }
 
         return services;
     }

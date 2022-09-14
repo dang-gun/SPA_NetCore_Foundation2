@@ -2,6 +2,7 @@
 using DGAuthServer.Models;
 using DGAuthServer.ModelsDB;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -65,6 +66,12 @@ public class DGAuthServerService
                     //db에 적용
                     db1.Add(newAT);
                     db1.SaveChanges();
+
+                    if (true == DGAuthServerGlobal.Setting.MemoryCacheIs)
+                    {//메모리 캐쉬에 저장
+
+                        this.MemoryCacheSaveSecret(idUser, sSecret);
+                    }
                 }
             }//end using db1
         }
@@ -208,36 +215,54 @@ public class DGAuthServerService
             sTokenCut = sTokenFinal.Substring(
                             nUser + DGAuthServerGlobal.Setting.SecretAloneDelimeter.Length);
 
-            //찾은 엑세스토큰 데이터
-            DgAuthAccessToken? findAT = null;
+            
 
-            //연결된 시크릿 검색
-            using (DgAuthDbContext db1 = new DgAuthDbContext())
+            if (true == DGAuthServerGlobal.Setting.MemoryCacheIs
+                && true == this.MemoryCacheFindSecret(idUser, out sSecret))
+            {//메모리 캐쉬를 사용중이고
+                //메모리 캐쉬에서 값을 찾았다.
+
+                //이미 sSecret에 데이터가 들어갔으니 처리하지 않는다.
+            }
+            else
             {
-                findAT
-                    = db1.DGAuthServer_AccessToken
-                        .Where(w => w.idUser == idUser
-                                && w.Class == sClass)
-                        .FirstOrDefault();
+                //연결된 시크릿 검색
+                using (DgAuthDbContext db1 = new DgAuthDbContext())
+                {
+                    DgAuthAccessToken? findAT
+                        = db1.DGAuthServer_AccessToken
+                            .Where(w => w.idUser == idUser
+                                    && w.Class == sClass)
+                            .FirstOrDefault();
 
-            }//end using db1
+                    if (null != findAT)
+                    {//엑세스 토큰을 찾았다.
 
-            if (null == findAT
-                || string.Empty == findAT.Secret)
+                        //찾은 시크릿 전달
+                        sSecret = findAT.Secret;
+
+                        if (true == DGAuthServerGlobal.Setting.MemoryCacheIs)
+                        {
+                            //메모리 캐쉬에 저장한다.
+                            this.MemoryCacheSaveSecret(idUser, sSecret);
+                        }
+                    }
+                }//end using db1
+            }
+
+            
+
+            if (null == sSecret
+                || string.Empty == sSecret)
             {//시크릿 정보가 없다.
                 return 0;
             }
-
-            //찾은 시크릿 전달
-            sSecret = findAT.Secret;
         }
 		else
 		{
 			sTokenCut = sTokenFinal;
             sSecret = DGAuthServerGlobal.Setting.Secret!;
-
         }
-
 
 
         //정보 분석 시작 ****************
@@ -288,8 +313,7 @@ public class DGAuthServerService
     /// 기존 엑세스토큰은 사용할 수 없게 된다.
     /// <para>
     /// 여러 사이트(혹은 프로그램)에서 하나의 인증서버를 두고 사용할경우 
-    /// idUser와 sClass가 겹치면 다른 사이트에서도 엑세스토큰이 만료되게 된다.<br />
-    /// bAllRevoke가 true이면 idUser만 겹치면 만료된다.
+    /// idUser가 겹치면 다른 사이트에서도 엑세스토큰이 만료되게 된다.
     /// </para>
     /// </remarks>
     /// 
@@ -793,5 +817,41 @@ public class DGAuthServerService
             = DGAuthServerGlobal.DbClearTime
                 .AddSeconds(DGAuthServerGlobal.Setting.DbClearTime);
 
+    }
+
+    /// <summary>
+    /// 메모리 캐쉬에 시크릿 키를 저장한다.
+    /// </summary>
+    /// <param name="idUser"></param>
+    /// <param name="sSecret"></param>
+    private void MemoryCacheSaveSecret(long idUser, string sSecret)
+    {
+        //메모리 캐쉬에 저장한다.
+        ICacheEntry cacheEntry
+            = DGAuthServerGlobal.MemoryCache!
+                .CreateEntry(DGAuthServerGlobal.Setting.AccessTokenCookieName + idUser);
+        cacheEntry.SetValue(sSecret);
+    }
+
+    /// <summary>
+    /// 메모리 캐쉬에서 시크릿 키를 찾아 리턴한다.
+    /// </summary>
+    /// <param name="idUser"></param>
+    /// <param name="sSecret"></param>
+    /// <returns></returns>
+    private bool MemoryCacheFindSecret(long idUser, out string sSecret)
+    {
+        bool bReturn = false;
+
+        bReturn
+            = DGAuthServerGlobal.MemoryCache!
+                .TryGetValue(DGAuthServerGlobal.Setting.AccessTokenCookieName + idUser
+                                , out sSecret);
+        if (null == sSecret)
+        {
+            sSecret = string.Empty;
+        }
+        
+        return bReturn;
     }
 }

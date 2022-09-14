@@ -91,7 +91,6 @@ public class DgAuthSettingModel
 	/// 시크릿을 혼자 사용하면 엑세스 토큰을 강제로 만료시키는 기능을 사용할 수 있다.<br />
 	/// 보안상으로도 더 좋다.<br />
 	/// 하지만 매번 저장소를 검색해야 하므로 자원낭비가 심하다.<br />
-	/// 이 옵션을 사용하면 엑세스 토큰도 리플래시 토큰처럼 서버에서 관리하는 효과가 있으므로 되도록 사용하지 않는것이 좋다.<br />
 	/// 자신의 서비스가 동시접속자가 많다면 권장하지 않는 기능이다.
 	/// </remarks>
 	public bool SecretAlone { get; set; } = false;
@@ -110,6 +109,7 @@ public class DgAuthSettingModel
 	/// 문장도 가능하지만 가능한 짧게 넣는것이 좋다.
 	/// </para>
 	/// </remarks>
+	/// 
 	public string SecretAloneDelimeter { get; set; } = "%";
 
 	#region 엑세스 토큰
@@ -188,11 +188,23 @@ public class DgAuthSettingModel
 	/// </summary>
 	/// <remarks>
 	/// 사용 종료된 리플레시 토큰을 DB에서 지우고
-	/// 남아있는 토큰의 수명을 확인하는 주기.
-	/// 
+	/// 남아있는 토큰의 수명을 확인하는 주기.<br />
+	/// 캐쉬를 사용하는경우 동기화도 진행된다.
 	/// <para>서버 시작시간 기준으로 주기가 돌아간다.</para>
 	/// </remarks>
 	public int DbClearTime { get; set; } = 604800;
+
+	/// <summary>
+	/// 메모리 캐쉬 사용여부
+	/// <para>물리 메모리를 사용하여 속도를 향상시킨다.</para>
+	/// </summary>
+	/// <remarks>
+	/// ASP.NET 자체기능인 MemoryCache를 사용할지 여부다.<br />
+	/// DGAuthServerGlobal.MemoryCache에 생성된다.
+	/// <para>개인 시크릿 키 사용시 사용하면 좋다.</para>
+	/// </remarks>
+	public bool MemoryCacheIs { get; set; } = false;
+
 
 	/// <summary>
 	/// 모든 데이터를 복사한다.
@@ -219,6 +231,8 @@ public class DgAuthSettingModel
 		this.UserIdName = data.UserIdName;
 
 		this.DbClearTime = data.DbClearTime;
+
+		this.MemoryCacheIs = data.MemoryCacheIs;
 	}
 		
 }

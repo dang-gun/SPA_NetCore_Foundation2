@@ -1,11 +1,9 @@
 ﻿using DGAuthServer.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace DGAuthServer;
 
-/// <summary>
-/// DGAuthServer용 전역 개체
-/// </summary>
 public static class DGAuthServerGlobal
 {
 	/// <summary>
@@ -38,5 +36,10 @@ public static class DGAuthServerGlobal
 	/// DB 컨택스트의 OnConfiguring이벤트에 사용될 액션
 	/// </summary>
 	public static Action<DbContextOptionsBuilder>? ActDbContextOnConfiguring = null;
+
+	/// <summary>
+	/// 메모리 캐쉬 사용시 개체
+	/// </summary>
+	public static IMemoryCache? MemoryCache;
 
 }
