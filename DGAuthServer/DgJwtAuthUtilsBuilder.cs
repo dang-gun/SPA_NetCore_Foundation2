@@ -55,8 +55,11 @@ public static class DgJwtAuthUtilsBuilder
         //테이블 생성
         using (DgAuthDbContext db1 = new DgAuthDbContext())
         {
-            db1.Database.EnsureCreated();
-        }
+            //db1.Database.EnsureCreated();
+
+
+            db1.Database.Migrate();
+		}
 
 
         //db 클리어 설정

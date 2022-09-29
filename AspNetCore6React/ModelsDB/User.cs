@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace ModelsDB
 {
@@ -7,6 +8,7 @@ namespace ModelsDB
 		/// <summary>
 		/// 유저 고유키
 		/// </summary>
+		[Key]
 		public int idUser { get; set; }
 
 		/// <summary>

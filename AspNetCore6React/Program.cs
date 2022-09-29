@@ -1,4 +1,7 @@
 using AspNetCore6React.Global;
+using DGAuthServer;
+using DGAuthServer.Models;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +19,26 @@ GlobalStatic.DBString = configuration[sConnectStringSelect + ":ConnectionString"
 #region ConfigureServices
 //API모델을 파스칼 케이스 유지하기
 builder.Services.AddControllers().AddNewtonsoftJson(options => { options.SerializerSettings.ContractResolver = new DefaultContractResolver(); });
+
+//DGAuthServer Setting 정보 전달
+//services.Configure<DgJwtAuthSettingModel>(Configuration.GetSection("JwtSecretSetting"));
+builder.Services.AddDgAuthServerBuilder(
+	new DgAuthSettingModel()
+	{
+		Secret = configuration["JwtSecretSetting:Secret"],
+		//개인 시크릿 허용
+		SecretAlone = false,
+
+		//테스트를 위해 60초로 설정
+		AccessTokenLifetime = 60,
+		AccessTokenCookie = true,
+		RefreshTokenCookie = true,
+
+		//메모리 캐쉬 사용 허용
+		MemoryCacheIs = true,
+	}
+	, (options => options.UseSqlite(GlobalStatic.DBString)));
+	//, null);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
