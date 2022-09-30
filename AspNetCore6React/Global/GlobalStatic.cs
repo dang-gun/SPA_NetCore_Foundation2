@@ -1,14 +1,17 @@
-﻿using ModelsDB;
+﻿using AspNetCore6React.Models;
+using ModelsDB;
 
 namespace AspNetCore6React.Global;
 
+/// <summary>
+/// 프로그램 전역 변수
+/// </summary>
 public static class GlobalStatic
 {
 	/// <summary>
 	/// DB 타입
 	/// </summary>
-	/// <remarks>저장전에 소문자로 변환해야 한다.</remarks>
-	public static string DBType = "";
+	public static UseDbType DBType = UseDbType.Memory;
 	/// <summary>
 	/// DB 컨낵션 스트링 저장
 	/// </summary>

@@ -38,10 +38,6 @@ public static class DGAuthServerGlobal
 	public static Action<DbContextOptionsBuilder>? ActDbContextOnConfiguring = null;
 
 	/// <summary>
-	/// 'ActDbContextOnConfiguring'가 Null인경우 사용할 DB타입
-	/// </summary>
-	public static DbType DbType = DbType.None;
-	/// <summary>
 	/// 'ActDbContextOnConfiguring'가 Null인경우 사용할 DB 커낵트 스트링
 	/// </summary>
 	public static string DbConnectString = string.Empty;

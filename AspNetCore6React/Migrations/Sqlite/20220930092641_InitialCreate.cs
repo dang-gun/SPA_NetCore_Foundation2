@@ -2,14 +2,10 @@
 
 #nullable disable
 
-namespace AspNetCore6React.Migrations
+namespace AspNetCore6React.Migrations.Sqlite
 {
-    public partial class Initialize : Migration
+    public partial class InitialCreate : Migration
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="migrationBuilder"></param>
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -37,10 +33,6 @@ namespace AspNetCore6React.Migrations
                 values: new object[] { 2, "1111", "test02" });
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="migrationBuilder"></param>
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

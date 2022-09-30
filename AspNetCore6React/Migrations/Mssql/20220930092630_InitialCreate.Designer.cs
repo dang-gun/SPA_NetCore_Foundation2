@@ -7,23 +7,16 @@ using ModelsDB;
 
 #nullable disable
 
-namespace AspNetCore6React.Migrations
+namespace AspNetCore6React.Migrations.Mssql
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    [DbContext(typeof(ModelsDbContext))]
-    [Migration("20220922083343_Initialize")]
-    partial class Initialize
+    [DbContext(typeof(ModelsDbContext_Mssql))]
+    [Migration("20220930092630_InitialCreate")]
+    partial class InitialCreate
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="modelBuilder"></param>
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "6.0.8");
+            modelBuilder.HasAnnotation("ProductVersion", "6.0.9");
 
             modelBuilder.Entity("ModelsDB.User", b =>
                 {

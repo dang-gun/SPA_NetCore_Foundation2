@@ -35,7 +35,7 @@ public class DgAuthDbContext_SqliteFactory : IDesignTimeDbContextFactory<DgAuthD
 		SettingInfoModel? loadSetting = JsonConvert.DeserializeObject<SettingInfoModel>(sJson);
 
 		//Add-Migration InitialCreate -Context DgAuthDbContext_Sqlite -OutputDir Migrations/Sqlite
-		DGAuthServerGlobal.DbType = DbType.Sqlite;
+		DGAuthServerGlobal.Setting.DbType = DGAuthDbType.Sqlite;
 		DGAuthServerGlobal.DbConnectString = loadSetting!.ConnectionString_Sqlite;
 
 		return new DgAuthDbContext_Sqlite(optionsBuilder.Options);

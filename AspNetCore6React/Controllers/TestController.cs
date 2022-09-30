@@ -3,6 +3,9 @@
 
 namespace AspNetCore6React.Controllers;
 
+/// <summary>
+/// 
+/// </summary>
 [Route("api/[controller]/[action]")]
 [ApiController]
 public class TestController : ControllerBase

@@ -9,12 +9,12 @@ namespace ModelsDB
     /// </summary>
     public class ModelsDbContext : DbContext
     {
-        /// <summary>
-        /// 
-        /// </summary>
+
 #pragma warning disable CS8618 // 생성자를 종료할 때 null을 허용하지 않는 필드에 null이 아닌 값을 포함해야 합니다. null 허용으로 선언해 보세요.
-        public ModelsDbContext()
-#pragma warning restore CS8618 // 생성자를 종료할 때 null을 허용하지 않는 필드에 null이 아닌 값을 포함해야 합니다. null 허용으로 선언해 보세요.
+		/// <summary>
+		/// 
+		/// </summary>
+		public ModelsDbContext()
         {
         }
 
@@ -22,25 +22,30 @@ namespace ModelsDB
         /// 
         /// </summary>
         /// <param name="options"></param>
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
-        {
-            
+		public ModelsDbContext(DbContextOptions<ModelsDbContext> options)
+			: base(options)
+		{
+		}
+#pragma warning restore CS8618 // 생성자를 종료할 때 null을 허용하지 않는 필드에 null이 아닌 값을 포함해야 합니다. null 허용으로 선언해 보세요.
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="options"></param>
+		protected override void OnConfiguring(DbContextOptionsBuilder options)
+        {
             switch (GlobalStatic.DBType)
             {
-                case "sqlite":
+                case AspNetCore6React.Models.UseDbType.Sqlite:
                     options.UseSqlite(GlobalStatic.DBString);
                     break;
-                case "mysql":
-                    //options.UseSqlite(GlobalStatic.DBString);
-                    break;
-                case "mssql":
-                    //options.UseSqlServer(GlobalStatic.DBString);
+                case AspNetCore6React.Models.UseDbType.Mssql:
+                    options.UseSqlServer(GlobalStatic.DBString);
                     break;
 
-                case "inmemory":
+                case AspNetCore6React.Models.UseDbType.Memory:
                 default:
-                    //options.UseInMemoryDatabase("TestDb");
+                    options.UseInMemoryDatabase("TestDb");
                     break;
             }
         }

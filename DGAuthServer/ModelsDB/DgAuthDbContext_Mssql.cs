@@ -37,7 +37,7 @@ public class DgAuthDbContext_MssqlFactory : IDesignTimeDbContextFactory<DgAuthDb
 		//Add-Migration InitialCreate -Context DgAuthDbContext_Mssql -OutputDir Migrations/Mssql
 		//Update-Database -Context DgAuthDbContext_Mssql -Migration 0
 		//"Server=[주소];DataBase=[데이터 베이스];UId=[아이디];pwd=[비밀번호]"
-		DGAuthServerGlobal.DbType = DbType.Mssql;
+		DGAuthServerGlobal.Setting.DbType = DGAuthDbType.Mssql;
 		DGAuthServerGlobal.DbConnectString = loadSetting!.ConnectionString_Mssql;
 
 		return new DgAuthDbContext_Mssql(optionsBuilder.Options);

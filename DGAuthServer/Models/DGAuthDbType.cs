@@ -6,17 +6,25 @@ using System.Threading.Tasks;
 
 namespace DGAuthServer.Models;
 
-public enum DbType
+/// <summary>
+/// 사용할 수 있는 DB의 타입
+/// </summary>
+public enum DGAuthDbType
 {
-	None = 0,
+	/// <summary>
+	/// In Memory
+	/// </summary>
+	Memory = 0,
+
+	/// <summary>
+	/// Sqlite
+	/// </summary>
+	Sqlite,
 
 	/// <summary>
 	/// MS Sql
 	/// </summary>
 	Mssql,
 
-	/// <summary>
-	/// Sqlite
-	/// </summary>
-	Sqlite,
+	
 }

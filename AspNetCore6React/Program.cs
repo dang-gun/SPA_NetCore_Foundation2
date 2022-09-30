@@ -1,7 +1,12 @@
 using AspNetCore6React.Global;
+using AspNetCore6React.Models;
 using DGAuthServer;
 using DGAuthServer.Models;
+using DGAuthServer.ModelsDB;
+using EfMultiMigrations.Models;
 using Microsoft.EntityFrameworkCore;
+using ModelsDB;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,10 +15,74 @@ var builder = WebApplication.CreateBuilder(args);
 //appsettings.json
 IConfiguration configuration = builder.Configuration;
 
-//DB 커낵션 스트링 받아오기
+
+//DB 정보 읽기 ******************
+//DB정보 받으려는 타겟
 string sConnectStringSelect = "Test_sqlite";
-GlobalStatic.DBType = configuration[sConnectStringSelect + ":DBType"].ToLower();
+
+//사용하려는 DB타입
+switch (configuration[sConnectStringSelect + ":DBType"].ToLower())
+{
+	case "sqlite":
+		GlobalStatic.DBType = UseDbType.Sqlite;
+		break;
+	case "mssql":
+		GlobalStatic.DBType = UseDbType.Mssql;
+		break;
+
+	default://기본
+		GlobalStatic.DBType = UseDbType.Memory;
+		break;
+}
+
+//DB 커낵션
 GlobalStatic.DBString = configuration[sConnectStringSelect + ":ConnectionString"];
+
+//깃에 DB정보가 올라가지 않도록 'SettingInfo_gitignore.json'을 읽어서 사용합니다
+//실서비스에 사용할때는 이 블록을 지우고 사용해야 합니다.
+{
+	//설정 파일 읽기
+	string sJson = File.ReadAllText("SettingInfo_gitignore.json");
+	SettingInfoModel? loadSetting = JsonConvert.DeserializeObject<SettingInfoModel>(sJson);
+
+	switch (GlobalStatic.DBType)
+	{
+		case UseDbType.Sqlite:
+			GlobalStatic.DBString = loadSetting!.ConnectionString_Sqlite;
+			break;
+		case UseDbType.Mssql:
+			GlobalStatic.DBString = loadSetting!.ConnectionString_Mssql;
+			break;
+	}
+}
+
+//db 마이그레이션 적용
+switch (GlobalStatic.DBType)
+{
+	case UseDbType.Sqlite:
+		using (ModelsDbContext_Sqlite db1 = new ModelsDbContext_Sqlite())
+		{
+			//db1.Database.EnsureCreated();
+			db1.Database.Migrate();
+		}
+		break;
+	case UseDbType.Mssql:
+		using (ModelsDbContext_Mssql db1 = new ModelsDbContext_Mssql())
+		{
+			//db1.Database.EnsureCreated();
+			db1.Database.Migrate();
+		}
+		break;
+
+	default://기본
+		using (DgAuthDbContext db1 = new DgAuthDbContext())
+		{
+			//db1.Database.EnsureCreated();
+			db1.Database.Migrate();
+		}
+		break;
+}
+
 #endregion
 
 #region ConfigureServices
@@ -22,6 +91,19 @@ builder.Services.AddControllers().AddNewtonsoftJson(options => { options.Seriali
 
 //DGAuthServer Setting 정보 전달
 //services.Configure<DgJwtAuthSettingModel>(Configuration.GetSection("JwtSecretSetting"));
+
+//사용할 DB 알림
+DGAuthDbType typeDgAuthServerDb = DGAuthDbType.Memory;
+switch (GlobalStatic.DBType)
+{
+	case UseDbType.Sqlite:
+		typeDgAuthServerDb = DGAuthDbType.Sqlite;
+		break;
+	case UseDbType.Mssql:
+		typeDgAuthServerDb = DGAuthDbType.Mssql;
+		break;
+}
+
 builder.Services.AddDgAuthServerBuilder(
 	new DgAuthSettingModel()
 	{
@@ -33,6 +115,8 @@ builder.Services.AddDgAuthServerBuilder(
 		AccessTokenLifetime = 60,
 		AccessTokenCookie = true,
 		RefreshTokenCookie = true,
+
+		DbType = typeDgAuthServerDb,
 
 		//메모리 캐쉬 사용 허용
 		MemoryCacheIs = true,

@@ -33,13 +33,13 @@ public class DgAuthDbContext : DbContext
         {
 			Console.WriteLine("OnConfiguring : " + DGAuthServerGlobal.DbConnectString);
 
-			switch (DGAuthServerGlobal.DbType)
+			switch (DGAuthServerGlobal.Setting.DbType)
             {
-				case DbType.Sqlite:
+				case DGAuthDbType.Sqlite:
 					options.UseSqlite(DGAuthServerGlobal.DbConnectString);
 					break;
 
-				case DbType.Mssql:
+				case DGAuthDbType.Mssql:
 					options.UseSqlServer(DGAuthServerGlobal.DbConnectString);
 					break;
 			}

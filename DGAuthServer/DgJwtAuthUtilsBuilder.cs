@@ -40,26 +40,46 @@ public static class DgJwtAuthUtilsBuilder
             options.ToCopy(DGAuthServerGlobal.Setting);
         });
 
-        if (null != actDbContextOnConfiguring)
-        {
-            DGAuthServerGlobal.ActDbContextOnConfiguring
-                = actDbContextOnConfiguring;
+        if (DGAuthDbType.Memory == DGAuthServerGlobal.Setting.DbType
+            || null == actDbContextOnConfiguring)
+        {//사용 db가 메모리거나 
+            //연결된 DB액션이 없다.
+
+			//자체적으로 사용할 데이터 베이스
+			DGAuthServerGlobal.ActDbContextOnConfiguring
+				= (options => options.UseInMemoryDatabase(databaseName: "DGAuthServer_DB"));	
         }
         else
         {
-            //자체적으로 사용할 데이터 베이스
-            DGAuthServerGlobal.ActDbContextOnConfiguring
-                = (options => options.UseInMemoryDatabase(databaseName: "DGAuthServer_DB"));
-        }
-
-        //테이블 생성
-        using (DgAuthDbContext db1 = new DgAuthDbContext())
-        {
-            //db1.Database.EnsureCreated();
-
-
-            db1.Database.Migrate();
+			DGAuthServerGlobal.ActDbContextOnConfiguring
+				= actDbContextOnConfiguring;
 		}
+
+
+		//테이블 생성 및 마이그레이션 정보 적용
+		switch (DGAuthServerGlobal.Setting.DbType)
+        {
+            case DGAuthDbType.Sqlite:
+				using (DgAuthDbContext_Sqlite dbSqlite = new DgAuthDbContext_Sqlite())
+				{
+					dbSqlite.Database.Migrate();
+				}
+				break;
+			case DGAuthDbType.Mssql:
+				using (DgAuthDbContext_Mssql dbSqlite = new DgAuthDbContext_Mssql())
+				{
+					dbSqlite.Database.Migrate();
+				}
+				break;
+
+			default:
+				using (DgAuthDbContext db1 = new DgAuthDbContext())
+				{
+					//db1.Database.EnsureCreated();
+					db1.Database.Migrate();
+				}
+				break;
+        }
 
 
         //db 클리어 설정

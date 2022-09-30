@@ -183,6 +183,14 @@ public class DgAuthSettingModel
 	public string UserIdName { get; set; } = "idUser";
 
 	/// <summary>
+	/// 사용할 DB 타입
+	/// </summary>
+	/// <remarks>
+	/// 'DbType.Memory'를 기본으로 사용한다.
+	/// </remarks>
+	public DGAuthDbType DbType { get; set; } = DGAuthDbType.Memory;
+
+	/// <summary>
 	/// DB 비우는 시간(초, s)
 	/// <para>기본값 604800 = 7일</para>
 	/// </summary>
@@ -230,6 +238,7 @@ public class DgAuthSettingModel
 
 		this.UserIdName = data.UserIdName;
 
+		this.DbType = data.DbType;
 		this.DbClearTime = data.DbClearTime;
 
 		this.MemoryCacheIs = data.MemoryCacheIs;
