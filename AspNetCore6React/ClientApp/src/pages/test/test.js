@@ -11,8 +11,13 @@ import TestHtml2 from './test2.html';
 
 import GlobalStatic from '@/Global/GlobalStatic.js';
 
+var sAT = "";
+var sRT = "";
+
 export default class Test extends Component
 {
+    
+
     constructor()
     {
         super();
@@ -125,6 +130,7 @@ export default class Test extends Component
             });
     }
 
+
     async SignInCall()
     {
         let formData = new FormData();
@@ -148,7 +154,9 @@ export default class Test extends Component
 
         if (undefined !== jsonResult)
         {//재대로 데이터를 전달 받았다.
-            alert("성공(SignInCall) : " + jsonResult.Token);
+            sAT = jsonResult.AccessToken;
+            sRT = jsonResult.RefreshToken;
+            alert("성공(SignInCall) : " + jsonResult.AccessToken);
         }
         else
         {
@@ -163,11 +171,20 @@ export default class Test extends Component
         $.ajax({
             url: "/api/Sign/SignInfo",
             type: "Get",
+            headers: { 'Authorization': 'Bearer ' + sAT },
             data: { idUser: 1 },
             success: function (data)
             {
                 console.log(data);
-                alert("성공 : " + data.UserInfo.SignName);
+                if (0 < data.UserInfo.length)
+                {
+                    alert("성공 : " + data.UserInfo[0].SignName);
+                }
+                else
+                {
+                    alert("성공 : 데이터 없음");
+                }
+                
                 //alert(data);
             },
             error: function (error)

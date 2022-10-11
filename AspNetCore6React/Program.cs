@@ -140,6 +140,9 @@ if (app.Environment.IsDevelopment())
 	app.UseSwaggerUI();
 }
 
+//DGAuthServerService 빌더
+app.UseDgAuthServerAppBuilder();
+
 //3.0 api 라우트
 app.UseRouting();
 //https로 자동 리디렉션
