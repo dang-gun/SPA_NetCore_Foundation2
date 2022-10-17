@@ -149,7 +149,8 @@ module.exports = (env, argv) =>
             /** 출력파일의 위치 */
             static: [path.resolve("./", WwwRoot)],
             /** 브라우저 열지 여부 */
-            open: false,
+            //open: false,
+            open: "/admin/",
             /** 핫리로드 사용여부 */
             hot: true,
             /** 라이브 리로드 사용여부 */
