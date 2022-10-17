@@ -1,4 +1,4 @@
-namespace SPA_NetCore_Foundation2_TestHome;
+namespace SPA_NetCore_Foundation2_02Admin;
 
 public class Program
 {
