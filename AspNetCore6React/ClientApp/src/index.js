@@ -12,7 +12,7 @@ root.render(
         <div>
             <App />
 
-            <Test />
+            {/*<Test />*/}
         </div>
     </React.StrictMode>
 );

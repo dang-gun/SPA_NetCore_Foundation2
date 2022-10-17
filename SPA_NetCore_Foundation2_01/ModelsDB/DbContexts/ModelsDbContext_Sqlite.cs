@@ -1,0 +1,50 @@
+﻿using System;
+using SPA_NetCore_Foundation2_01.Global;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+
+namespace ModelsDB;
+
+/// <summary>
+/// Sqlite전용 컨텍스트
+/// </summary>
+/// <remarks>
+/// Add-Migration InitialCreate -Context ModelsDB.ModelsDbContext_Sqlite -OutputDir Migrations/Sqlite
+/// </remarks>
+public class ModelsDbContext_Sqlite : ModelsDbContext
+{
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="options"></param>
+	public ModelsDbContext_Sqlite(DbContextOptions<ModelsDbContext> options)
+		: base(options)
+	{
+	}
+	/// <summary>
+	/// 
+	/// </summary>
+	public ModelsDbContext_Sqlite()
+	{
+	}
+}
+
+/// <summary>
+/// Sqlite전용 컨텍스트 팩토리
+/// </summary>
+public class ModelsDbContext_SqliteFactory
+	: IDesignTimeDbContextFactory<ModelsDbContext_Sqlite>
+{
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="args"></param>
+	/// <returns></returns>
+	public ModelsDbContext_Sqlite CreateDbContext(string[] args)
+	{
+		DbContextOptionsBuilder<ModelsDbContext> optionsBuilder
+			= new DbContextOptionsBuilder<ModelsDbContext>();
+
+		return new ModelsDbContext_Sqlite(optionsBuilder.Options);
+	}
+}
