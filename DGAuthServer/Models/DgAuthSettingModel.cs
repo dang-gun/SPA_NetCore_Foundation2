@@ -5,6 +5,27 @@ namespace DGAuthServer.Models;
 public class DgAuthSettingModel
 {
 	/// <summary>
+	/// 사용할 DB 타입
+	/// </summary>
+	/// <remarks>
+	/// 'DbType.Memory'를 기본으로 사용한다.
+	/// </remarks>
+	public DGAuthDbType DbType { get; set; } = DGAuthDbType.Memory;
+
+	/// <summary>
+	/// DB 비우는 시간(초, s)
+	/// <para>기본값 604800 = 7일</para>
+	/// </summary>
+	/// <remarks>
+	/// 사용 종료된 리플레시 토큰을 DB에서 지우고
+	/// 남아있는 토큰의 수명을 확인하는 주기.<br />
+	/// 캐쉬를 사용하는경우 동기화도 진행된다.
+	/// <para>서버 시작시간 기준으로 주기가 돌아간다.</para>
+	/// </remarks>
+	public int DbClearTime { get; set; } = 604800;
+
+
+	/// <summary>
 	/// 인증용 헤더의 이름
 	/// <para>기본값 : authorization</para>
 	/// </summary>
@@ -169,7 +190,7 @@ public class DgAuthSettingModel
 		= RefreshTokenUsageType.OneTimeOnlyDelay;
 	/// <summary>
 	/// RefreshTokenReUseType에서 OneTimeOnlyDelay옵션 사용시 적용되는 지연시간(초, s)<br />
-	/// 기본값 : 3
+	/// 기본값 : OneTimeOnlyDelay
 	/// </summary>
 	public int OneTimeOnlyDelayTime { get; set; } = 3;
 	#endregion
@@ -182,25 +203,7 @@ public class DgAuthSettingModel
 	/// 아이디를 검색할때 사용하는 이름이다.</remarks>
 	public string UserIdName { get; set; } = "idUser";
 
-	/// <summary>
-	/// 사용할 DB 타입
-	/// </summary>
-	/// <remarks>
-	/// 'DbType.Memory'를 기본으로 사용한다.
-	/// </remarks>
-	public DGAuthDbType DbType { get; set; } = DGAuthDbType.Memory;
-
-	/// <summary>
-	/// DB 비우는 시간(초, s)
-	/// <para>기본값 604800 = 7일</para>
-	/// </summary>
-	/// <remarks>
-	/// 사용 종료된 리플레시 토큰을 DB에서 지우고
-	/// 남아있는 토큰의 수명을 확인하는 주기.<br />
-	/// 캐쉬를 사용하는경우 동기화도 진행된다.
-	/// <para>서버 시작시간 기준으로 주기가 돌아간다.</para>
-	/// </remarks>
-	public int DbClearTime { get; set; } = 604800;
+	
 
 	/// <summary>
 	/// 메모리 캐쉬 사용여부
@@ -220,6 +223,9 @@ public class DgAuthSettingModel
 	/// <param name="data"></param>
 	public void ToCopy(DgAuthSettingModel data)
 	{
+		this.DbType = data.DbType;
+		this.DbClearTime = data.DbClearTime;
+
 		this.AuthHeaderName = data.AuthHeaderName;
 		this.AuthTokenStartName = data.AuthTokenStartName;
 
@@ -237,9 +243,6 @@ public class DgAuthSettingModel
 		this.OneTimeOnlyDelayTime = data.OneTimeOnlyDelayTime;
 
 		this.UserIdName = data.UserIdName;
-
-		this.DbType = data.DbType;
-		this.DbClearTime = data.DbClearTime;
 
 		this.MemoryCacheIs = data.MemoryCacheIs;
 	}

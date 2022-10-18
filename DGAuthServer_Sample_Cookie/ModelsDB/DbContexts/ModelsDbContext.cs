@@ -1,5 +1,5 @@
 ﻿using System;
-using SPA_NetCore_Foundation2.Global;
+using DGAuthServer_Sample.Global;
 using Microsoft.EntityFrameworkCore;
 
 namespace ModelsDB;
@@ -34,16 +34,16 @@ public class ModelsDbContext : DbContext
 	/// <param name="options"></param>
 	protected override void OnConfiguring(DbContextOptionsBuilder options)
 	{
-		switch (GlobalStatic.DBType)
+		switch (GlobalStatic.DBType_String)
 		{
-			case SPA_NetCore_Foundation2.Models.UseDbType.Sqlite:
+			case "sqlite":
 				options.UseSqlite(GlobalStatic.DBString);
 				break;
-			case SPA_NetCore_Foundation2.Models.UseDbType.Mssql:
+			case "mssql":
 				options.UseSqlServer(GlobalStatic.DBString);
 				break;
 
-			case SPA_NetCore_Foundation2.Models.UseDbType.Memory:
+			case "memory":
 			default:
 				options.UseInMemoryDatabase("TestDb");
 				break;

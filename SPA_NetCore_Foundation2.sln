@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuth2Test1", "OAuth2Test1\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DGAuthServer", "DGAuthServer\DGAuthServer.csproj", "{CBE6CBFC-848D-41AE-8A22-9A62DBBB1884}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FoundationTest", "FoundationTest\FoundationTest.csproj", "{586BF1C6-5CE4-4B58-81CB-80C663D2D165}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCore6React", "AspNetCore6React\AspNetCore6React.csproj", "{EA80FC37-83D1-4964-B076-82FFC622503B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiResult", "ApiResult\ApiResult.csproj", "{15AE1682-D3A6-42DB-B883-C0D231A57045}"
@@ -25,11 +23,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SPA_NetCore_Foundation2_Tes
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SPA_NetCore_FDN2_01", "SPA_NetCore_FDN2_01", "{CC8776C2-5FB3-4842-A738-0D50A19E476E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPA_NetCore_Foundation2_02", "SPA_NetCore_Foundation2_02\SPA_NetCore_Foundation2_02.csproj", "{F8C0DA2C-A778-4AAB-8D1E-8E30ABE96F1B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SPA_NetCore_Foundation2_02", "SPA_NetCore_Foundation2_02\SPA_NetCore_Foundation2_02.csproj", "{F8C0DA2C-A778-4AAB-8D1E-8E30ABE96F1B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPA_NetCore_Foundation2_02Admin", "SPA_NetCore_Foundation2_02Admin\SPA_NetCore_Foundation2_02Admin.csproj", "{08744B7F-362B-4893-93CA-C2AAE73FF5DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SPA_NetCore_Foundation2_02Admin", "SPA_NetCore_Foundation2_02Admin\SPA_NetCore_Foundation2_02Admin.csproj", "{08744B7F-362B-4893-93CA-C2AAE73FF5DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPA_NetCore_Foundation2_02Home", "SPA_NetCore_Foundation2_02Home\SPA_NetCore_Foundation2_02Home.csproj", "{5AC085B1-EDD0-4D08-9E37-B90F408095D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SPA_NetCore_Foundation2_02Home", "SPA_NetCore_Foundation2_02Home\SPA_NetCore_Foundation2_02Home.csproj", "{5AC085B1-EDD0-4D08-9E37-B90F408095D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DGAuthServer_Sample_Cookie", "DGAuthServer_Sample_Cookie\DGAuthServer_Sample_Cookie.csproj", "{E09198D8-A850-4043-B479-7E71FCD30898}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,10 +45,6 @@ Global
 		{CBE6CBFC-848D-41AE-8A22-9A62DBBB1884}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBE6CBFC-848D-41AE-8A22-9A62DBBB1884}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBE6CBFC-848D-41AE-8A22-9A62DBBB1884}.Release|Any CPU.Build.0 = Release|Any CPU
-		{586BF1C6-5CE4-4B58-81CB-80C663D2D165}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{586BF1C6-5CE4-4B58-81CB-80C663D2D165}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{586BF1C6-5CE4-4B58-81CB-80C663D2D165}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{586BF1C6-5CE4-4B58-81CB-80C663D2D165}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EA80FC37-83D1-4964-B076-82FFC622503B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EA80FC37-83D1-4964-B076-82FFC622503B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA80FC37-83D1-4964-B076-82FFC622503B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -85,6 +81,10 @@ Global
 		{5AC085B1-EDD0-4D08-9E37-B90F408095D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5AC085B1-EDD0-4D08-9E37-B90F408095D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5AC085B1-EDD0-4D08-9E37-B90F408095D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E09198D8-A850-4043-B479-7E71FCD30898}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E09198D8-A850-4043-B479-7E71FCD30898}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E09198D8-A850-4043-B479-7E71FCD30898}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E09198D8-A850-4043-B479-7E71FCD30898}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

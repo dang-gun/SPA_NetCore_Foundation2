@@ -439,12 +439,15 @@ public class DGAuthServerService
 
                                 if (RefreshTokenUsageType.ReUseAddTime == typeNewTokenFinal)
                                 {
-                                    //만료 시간을 는려준다.
+                                    //만료 시간을 늘려준다.
                                     findRT.ExpiresTime
                                         = DateTime.UtcNow
                                             .AddSeconds(DGAuthServerGlobal.Setting
                                                             .RefreshTokenLifetime);
-                                }
+
+									//기존 토큰 사용
+									bNew = false;
+								}
                                 else if (RefreshTokenUsageType.OneTimeOnlyDelay == typeNewTokenFinal)
                                 {
 

@@ -66,9 +66,9 @@ public static class DgJwtAuthUtilsBuilder
 				}
 				break;
 			case DGAuthDbType.Mssql:
-				using (DgAuthDbContext_Mssql dbSqlite = new DgAuthDbContext_Mssql())
+				using (DgAuthDbContext_Mssql dbMssql = new DgAuthDbContext_Mssql())
 				{
-					dbSqlite.Database.Migrate();
+					dbMssql.Database.Migrate();
 				}
 				break;
 

@@ -1,20 +1,17 @@
-﻿using SPA_NetCore_Foundation2.Global;
-using SPA_NetCore_Foundation2.Models;
-using DGAuthServer;
+﻿using DGAuthServer;
 using DGAuthServer.Models;
 using DGAuthServer.ModelsDB;
+using DGAuthServer_Sample.Global;
+using DGAuthServer_Sample.Models;
 using EfMultiMigrations.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.OpenApi.Models;
 using ModelsDB;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Microsoft.AspNetCore.Rewrite;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Options;
+using System.Data;
 
-namespace SPA_NetCore_Foundation2;
+namespace DGAuthServer_Sample;
+
 
 /// <summary>
 /// 
@@ -30,8 +27,10 @@ public class Startup
 	/// 
 	/// </summary>
 	/// <param name="configuration"></param>
-	public Startup(IConfiguration configuration)
+	/// <param name="env"></param>
+	public Startup(IConfiguration configuration, IHostEnvironment env)
 	{
+		//전달받은 'appsettings.json'백업
 		Configuration = configuration;
 
 		//DB 정보 읽기 ******************
@@ -40,22 +39,23 @@ public class Startup
 		//string sConnectStringSelect = "Test_mssql";
 
 		//사용하려는 DB타입
-		switch (configuration[sConnectStringSelect + ":DBType"].ToLower())
+		GlobalStatic.DBType_String = Configuration[sConnectStringSelect + ":DBType"].ToLower();
+		switch (GlobalStatic.DBType_String)
 		{
 			case "sqlite":
-				GlobalStatic.DBType = UseDbType.Sqlite;
+				GlobalStatic.DBType = DGAuthDbType.Sqlite;
 				break;
 			case "mssql":
-				GlobalStatic.DBType = UseDbType.Mssql;
+				GlobalStatic.DBType = DGAuthDbType.Mssql;
 				break;
 
 			default://기본
-				GlobalStatic.DBType = UseDbType.Memory;
+				GlobalStatic.DBType = DGAuthDbType.Memory;
 				break;
 		}
-
 		//DB 커낵션
-		GlobalStatic.DBString = configuration[sConnectStringSelect + ":ConnectionString"];
+		GlobalStatic.DBString = Configuration[sConnectStringSelect + ":ConnectionString"];
+
 
 		//깃에 DB정보가 올라가지 않도록 'SettingInfo_gitignore.json'을 읽어서 사용합니다
 		//실서비스에 사용할때는 이 블록을 지우고 사용해야 합니다.
@@ -64,28 +64,30 @@ public class Startup
 			string sJson = File.ReadAllText("SettingInfo_gitignore.json");
 			SettingInfoModel? loadSetting = JsonConvert.DeserializeObject<SettingInfoModel>(sJson);
 
-			switch (GlobalStatic.DBType)
+			switch (GlobalStatic.DBType_String)
 			{
-				case UseDbType.Sqlite:
+				case "sqlite":
 					GlobalStatic.DBString = loadSetting!.ConnectionString_Sqlite;
 					break;
-				case UseDbType.Mssql:
+				case "mssql":
 					GlobalStatic.DBString = loadSetting!.ConnectionString_Mssql;
 					break;
 			}
 		}
 
+
+
 		//db 마이그레이션 적용
 		switch (GlobalStatic.DBType)
 		{
-			case UseDbType.Sqlite:
+			case DGAuthDbType.Sqlite:
 				using (ModelsDbContext_Sqlite db1 = new ModelsDbContext_Sqlite())
 				{
 					//db1.Database.EnsureCreated();
 					db1.Database.Migrate();
 				}
 				break;
-			case UseDbType.Mssql:
+			case DGAuthDbType.Mssql:
 				using (ModelsDbContext_Mssql db1 = new ModelsDbContext_Mssql())
 				{
 					//db1.Database.EnsureCreated();
@@ -105,6 +107,7 @@ public class Startup
 
 	/// <summary>
 	/// This method gets called by the runtime. Use this method to add services to the container.
+	/// For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
 	/// </summary>
 	/// <param name="services"></param>
 	public void ConfigureServices(IServiceCollection services)
@@ -116,33 +119,33 @@ public class Startup
 		//services.Configure<DgJwtAuthSettingModel>(Configuration.GetSection("JwtSecretSetting"));
 
 		//사용할 DB 알림
-		DGAuthDbType typeDgAuthServerDb = DGAuthDbType.Memory;
 		Action<DbContextOptionsBuilder>? dbContextOptionsBuilder = null;
 		switch (GlobalStatic.DBType)
 		{
-			case UseDbType.Sqlite:
-				typeDgAuthServerDb = DGAuthDbType.Sqlite;
-				dbContextOptionsBuilder 
+			case DGAuthDbType.Sqlite:
+				dbContextOptionsBuilder
 					= (options => options.UseSqlite(GlobalStatic.DBString));
 				break;
-			case UseDbType.Mssql:
-				typeDgAuthServerDb = DGAuthDbType.Mssql;
+			case DGAuthDbType.Mssql:
 				dbContextOptionsBuilder
 					= (options => options.UseSqlServer(GlobalStatic.DBString));
 				break;
 		}
 
+		//DGAuthServer Setting 정보 전달
 		services.AddDgAuthServerBuilder(
 			new DgAuthSettingModel()
 			{
-				DbType = typeDgAuthServerDb,
+				DbType = GlobalStatic.DBType,
 
-				Secret = this.Configuration["JwtSecretSetting:Secret"],
+				Secret = Configuration["DgAuthServerSetting:Secret"],
 				//개인 시크릿 허용
-				SecretAlone = false,
+				SecretAlone = true,
 
 				//테스트를 위해 60초로 설정
 				AccessTokenLifetime = 60,
+
+				//쿠키 의존 샘플이므로 쿠키사용 필수
 				AccessTokenCookie = true,
 				RefreshTokenCookie = true,
 
@@ -151,93 +154,49 @@ public class Startup
 			}
 			, dbContextOptionsBuilder);
 
+
 		// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 		services.AddEndpointsApiExplorer();
 		services.AddSwaggerGen();
-
-
 	}
 
 	/// <summary>
-	/// 
+	/// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 	/// </summary>
 	/// <param name="app"></param>
 	/// <param name="env"></param>
 	public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 	{
-		
-		// Configure the HTTP request pipeline.
 		if (env.IsDevelopment())
-		{//개발 버전에서만 스웨거 사용
-			app.UseSwagger();
-			app.UseSwaggerUI();
-		}
+		{
+			app.UseDeveloperExceptionPage();
 
+			//스웨거 사용
+			//app.UseSwagger();
+			//app.UseSwaggerUI();
+		}
 
 		//DGAuthServerService 빌더
 		app.UseDgAuthServerAppBuilder();
 
-		//경로 지정
-		//var rewrite = new RewriteOptions()
-		//	   //.AddRewrite("home/", "/index.html", true)
-		//	   //.AddRewrite("home(.*)", "/home/index.html", true)
-		//	   .AddRewrite("admin/(.*)", "/production-admin/$1", true)
-		//	   .AddRewrite("admin", "/production-admin/", true)
-		//	   //.AddRewrite("admin/(.*)", "/production-admin/", true)
-		//	   //.AddRewrite("admin/", "/production-admin/index.html", true)
-		//	   //.AddRewrite("admin", "/production-admin/index.html", true)
-		//	   //.AddRewrite("aaa(.*)", "/aaa/index.html", true)
-		//	   //.AddRewrite("admin2(.*)", "/test1.html", true)
-		//	   .AddRewrite("(.*)", "/production-home/$1", true)
-		//	   ;
-		//app.UseRewriter(rewrite);
+		//스웨거 사용
+		app.UseSwagger();
+		app.UseSwaggerUI();
 
 		//3.0 api 라우트
 		app.UseRouting();
-		//https로 자동 리디렉션
-		app.UseHttpsRedirection();
-
-		
 
 		//기본 페이지
 		app.UseDefaultFiles();
-
-
 		//wwwroot
-		//app.UseStaticFiles();
-		app
-		.UseStaticFiles()
-		//.UseStaticFiles(new StaticFileOptions()
-		//{
-		//	FileProvider = new PhysicalFileProvider(
-		//		Path.Combine(env.ContentRootPath
-		//						, @"wwwroot\production-home")),
-		//	RequestPath = new PathString("/home"),
-		//})
-		//.UseStaticFiles(new StaticFileOptions()
-		//{
-		//	FileProvider = new PhysicalFileProvider(
-		//		Path.Combine(env.ContentRootPath
-		//						, @"wwwroot\production-admin")),
-		//	RequestPath = new PathString("/admin"),
-		//})
-		//.UseStaticFiles(new StaticFileOptions()
-		//{
-		//	FileProvider = new PhysicalFileProvider(
-		//		Path.Combine(env.ContentRootPath
-		//				, @"wwwroot\aaa")),
-		//	RequestPath = new PathString("/aaa"),
-		//})
-		;
+		app.UseStaticFiles();
 
 
-
-
-
-
+		//3.0 api 라우트 끝점
 		app.UseEndpoints(endpoints =>
 		{
 			endpoints.MapControllers();
 		});
 	}
 }
+
